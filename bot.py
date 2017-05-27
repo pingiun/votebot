@@ -37,7 +37,7 @@ def hash(x):
 
 class Poll(Base):
     __tablename__ = 'polls'
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
     title = Column(String)
     creator_id = Column(BigInteger)
     options = relationship("Option")
@@ -47,7 +47,7 @@ class Option(Base):
     __tablename__ = 'options'
     id = Column(String, primary_key=True)
     title = Column(String)
-    poll_id = Column(Integer, ForeignKey('polls.id'))
+    poll_id = Column(BigInteger, ForeignKey('polls.id'))
     poll = relationship("Poll", back_populates="options")
 
 
@@ -55,7 +55,7 @@ class Vote(Base):
     __tablename__ = 'votes'
     id = Column(Float, primary_key=True)
     user_id = Column(BigInteger, primary_key=True)
-    option_id = Column(Integer, primary_key=True)
+    option_id = Column(String, primary_key=True)
 
 
 Base.metadata.create_all(bind=engine)
