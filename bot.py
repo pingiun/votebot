@@ -63,7 +63,7 @@ Base.metadata.create_all(bind=engine)
 
 def generate_line(part, vote, total):
     if vote == 0:
-        return "{}\n▫️ 0%".format(part)
+        return "{}\n▫️  0%".format(part)
     return "{} - {}\n{} {:.0%}".format(part, vote,
                                        round(vote / total * 15) * "👍",
                                        vote / total)
@@ -71,7 +71,7 @@ def generate_line(part, vote, total):
 
 def generate_message(question, parts, votes=None):
     if votes == None:
-        votes = itertools.repeat(0, len(parts))
+        votes = list(itertools.repeat(0, len(parts)))
     total = sum(votes)
 
     options = "\n\n".join(
