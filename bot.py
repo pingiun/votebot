@@ -132,7 +132,7 @@ def inline_handler(bot, update):
 
 
 def get_votes_for_option(option_id):
-    return Vote.query.filter(
+    return db_session.query(Vote.user_id).filter(
         Vote.option_id == option_id).group_by(Vote.user_id).count()
 
 
