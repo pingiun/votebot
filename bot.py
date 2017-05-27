@@ -47,7 +47,7 @@ class Option(Base):
     __tablename__ = 'options'
     id = Column(String, primary_key=True)
     title = Column(String)
-    poll_id = Column(String, ForeignKey('polls.id'))
+    poll_id = Column(Integer, ForeignKey('polls.id'))
     poll = relationship("Poll", back_populates="options")
 
 
