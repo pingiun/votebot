@@ -87,7 +87,7 @@ def generate_button(query_id, part, vote):
 
 def generate_buttons(query_id, parts, votes=None):
     if votes == None:
-        votes = tertools.repeat(0, len(parts))
+        votes = itertools.repeat(0, len(parts))
 
     return [[
         generate_button(query_id, part, vote)
@@ -116,16 +116,17 @@ def inline_handler(bot, update):
                     "*{}*".format(parts[0]), parse_mode="markdown"))
         ])
     else:
-        description = " / ".join(parts[1:])
+        options = deduplicate(parts[1:])
+        description = " / ".join(options)
 
-        buttons = generate_buttons(query_id, parts[1:])
+        buttons = generate_buttons(query_id, options)
         update.inline_query.answer([
             InlineQueryResultArticle(
                 id=query_id,
                 title=parts[0],
                 description=description,
                 input_message_content=InputTextMessageContent(
-                    generate_message(parts[0], parts[1:]),
+                    generate_message(parts[0], options),
                     parse_mode="markdown"),
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
         ])
