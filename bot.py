@@ -87,7 +87,7 @@ def generate_button(query_id, part, vote):
 
 def generate_buttons(query_id, parts, votes=None):
     if votes == None:
-        votes = itertools.repeat(0, len(parts))
+        votes = tertools.repeat(0, len(parts))
 
     return [[
         generate_button(query_id, part, vote)
@@ -166,7 +166,12 @@ def button_handler(bot, update):
     db_session.add(vote)
     db_session.commit()
     update_message(bot, query.data, query.inline_message_id)
+    query.answer()
 
+def deduplicate(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
 
 def chosen_result_handler(bot, update):
     parts = shlex.split(update.chosen_inline_result.query)
@@ -174,7 +179,7 @@ def chosen_result_handler(bot, update):
     query_id = update.chosen_inline_result.result_id
 
     options = [
-        Option(id=query_id + hash(part)[:32], title=part) for part in parts[1:]
+        Option(id=query_id + hash(part)[:32], title=part) for part in deduplicate(parts[1:])
     ]
     poll = Poll(
         id=query_id,
